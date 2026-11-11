@@ -45,8 +45,15 @@ struct AndroidNormalSizeClassConfig {
   static const uptr MinSizeLog = 4;
   static const uptr MidSizeLog = 6;
   static const uptr MaxSizeLog = 16;
+#if defined(SCUDO_LOW_MEMORY)
   static const u16 MaxNumCachedHint = 13;
   static const uptr MaxBytesCachedLog = 13;
+#else
+  // Match the 64 KiB per-class cache used by mimalloc small pages and
+  // Android jemalloc's 64 KiB tcache_max.
+  static const u16 MaxNumCachedHint = 16;
+  static const uptr MaxBytesCachedLog = 16;
+#endif
 
   static constexpr uptr Classes[] = {
       0x00020, 0x00030, 0x00040, 0x00050, 0x00060, 0x00070, 0x00090, 0x000b0,
